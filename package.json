@@ -1,0 +1,38 @@
+{
+  "name": "agencjayello-backend",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "test": "tsx --env-file=.env.development tests/unit/run-unit-tests.ts",
+    "serve": "nodemon --exec npx tsx --env-file=.env.development src/server.ts",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "start": "node --env-file=.env.production ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "compression": "^1.8.0",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "nodemailer": "^6.10.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/compression": "^1.7.5",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.13.10",
+    "@types/nodemailer": "^6.4.17",
+    "nodemon": "^3.1.9",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

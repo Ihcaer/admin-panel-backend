@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "Node18",
+    "moduleResolution": "node16"
+  },
+  "include": ["./**/*", "../src/**/*"]
+}

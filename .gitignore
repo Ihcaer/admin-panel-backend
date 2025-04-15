@@ -1,0 +1,11 @@
+# Node
+/node_modules
+/dist
+
+# Config
+.env.production
+.env.development
+
+# Docker
+Dockerfile
+.dockerignore

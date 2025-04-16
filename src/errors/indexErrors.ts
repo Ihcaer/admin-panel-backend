@@ -13,9 +13,9 @@ export class NonCriticalError extends CustomError {
 }
 
 export class CriticalError extends CustomError {
-   constructor(message: string) {
+   constructor(message?: string) {
       super();
-      this.message = message;
+      if (message) this.message = message;
    }
 }
 

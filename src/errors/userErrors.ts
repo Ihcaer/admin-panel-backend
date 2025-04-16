@@ -47,3 +47,12 @@ export class PermissionsAuthenticationError extends NonCriticalError {
       this.statusCode = 403;
    }
 }
+
+export class NoUserDataError extends NonCriticalError {
+   constructor() {
+      super();
+      this.name = this.constructor.name;
+      this.message = "No user data";
+      this.statusCode = 400;
+   }
+}

@@ -9,18 +9,22 @@ import { generateToken, IJwtPayload, verifyToken } from "../../../src/utils/jwtU
 import { ILimitedUserDetails } from "../../../src/types/userTypes.js";
 import { StoredRefreshToken, StoredRefreshTokenBase } from "../../../src/interfaces/storedRefreshTokenInterface.js";
 import crypto from "crypto";
+import { generateCode } from "../../../src/utils/commonUtils.js";
 
 describe('Editor service', () => {
    let editorService: EditorService;
    let mockEditorRepository: EditorRepository;
    let mockEditorRefreshTokenRepository: EditorRefreshTokenRepository;
+
    let idPrefix: string;
+   let emailPrefix: string;
 
    beforeEach(() => {
       // console.log("\n--- Test Start ---");
       mockEditorRepository = new EditorRepositoryMock();
       mockEditorRefreshTokenRepository = new EditorRefreshRepositoryMock();
       editorService = new EditorService(mockEditorRepository, mockEditorRefreshTokenRepository);
+
       idPrefix = "5f9f1b9b9c9c1b000000000";
    });
 
@@ -110,5 +114,17 @@ describe('Editor service', () => {
       const result: boolean = await editorService.checkEditorPermissions(id, userPermissions);
 
       assert.deepStrictEqual(result, true);
+   });
+
+   test('saveLoginCodeInDB should save passwordResetCode correctly', async () => {
+      const editorIndex: number = 1;
+      const passwordResetCode: string = generateCode();
+
+      try {
+         await editorService.saveLoginCodeInDB(editorIndex.toString(), passwordResetCode);
+         assert.ok(true, "Method should not throw error");
+      } catch (error) {
+         assert.fail('Method threw an error: ' + error.message);
+      }
    });
 });

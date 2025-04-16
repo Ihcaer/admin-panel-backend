@@ -3,6 +3,7 @@ import { IError } from "../store/store.interface.js";
 import { errorEmailTemplate } from "../templates/email/errorEmailTemplate.js";
 import { contactEmailTemplate } from "../templates/email/contactEmailTemplate.js";
 import { registrationEmailTemplate } from "../templates/email/registrationEmailTemplate.js";
+import { passwordResetEmailTemplate } from "../templates/email/passwordResetEmailTemplate.js";
 
 interface EmailOptions {
    to: string;
@@ -59,6 +60,14 @@ class EmailService {
          to: registrationData.emailTo,
          subject: `Aktywuj swoje konto redaktora yello`,
          html: registrationEmailTemplate(registrationData.code)
+      })
+   }
+
+   async sendPasswordResetEmail(emailTo: string, code: string): Promise<void> {
+      await this.sendEmail({
+         to: emailTo,
+         subject: "Przypomnienie hasła redaktora yello",
+         html: passwordResetEmailTemplate(code)
       })
    }
 }

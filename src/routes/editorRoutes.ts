@@ -4,16 +4,19 @@ import EditorService from "../services/user/editorService.js";
 import EditorRefreshTokenRepository from "../repositories/editorRefreshTokenRepository.js";
 import EditorController from "../controllers/user/editorController.js";
 import restMiddleware from "../middlewares/restMiddleware.js";
+import EmailService from "../services/emailService.js";
 
 const editorRoutes: Router = Router();
 
-const editorRepository = new EditorRepository();
-const editorRefreshTokenRepository = new EditorRefreshTokenRepository();
-const editorService = new EditorService(editorRepository, editorRefreshTokenRepository);
-const editorController = new EditorController(editorService);
+const editorRepository: EditorRepository = new EditorRepository();
+const editorRefreshTokenRepository: EditorRefreshTokenRepository = new EditorRefreshTokenRepository();
+const editorService: EditorService = new EditorService(editorRepository, editorRefreshTokenRepository);
+const emailService: EmailService = new EmailService();
+const editorController: EditorController = new EditorController(editorService, emailService);
 
 editorRoutes.post('/login', restMiddleware, editorController.login.bind(editorController));
-editorRoutes.post('/refresh-token', restMiddleware, editorController.refreshToken.bind(editorController));
-editorRoutes.post('/remind-password', restMiddleware, editorController.remindPassword.bind(editorController));
+editorRoutes.put('/remind-password', restMiddleware, editorController.remindPassword.bind(editorController));
+editorRoutes.put('/confirm-account', restMiddleware, editorController.confirmEditorAccount.bind(editorController));
+editorRoutes.put('/confirm-password-remind', restMiddleware, editorController.confirmPasswordChangeFromReminder.bind(editorController));
 
 export default editorRoutes;

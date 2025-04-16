@@ -7,6 +7,7 @@ import { StoredRefreshToken, StoredRefreshTokenBase } from "../../interfaces/sto
 import { Types } from "mongoose";
 import { LoginCredentialsIncorrectError } from "../../errors/userErrors.js";
 import { HashingTokenError } from "../../errors/jwtCustomErrors.js";
+import { generateCode } from "../../utils/commonUtils.js";
 
 /**
  * Abstract service handling login operations.
@@ -40,6 +41,15 @@ export abstract class AbstractUserService {
       } catch (error) {
          throw error;
       }
+   }
+
+   async handleNewLoginCode(email: string): Promise<string> {
+      let passwordResetCode: string;
+
+      passwordResetCode = await this.generateLoginCodeAndCheckItInDB();
+      await this.saveLoginCodeInDB(email, passwordResetCode);
+
+      return passwordResetCode;
    }
 
    async #comparePasswords(password: string, hashedPassword: string): Promise<boolean> {
@@ -122,9 +132,12 @@ export abstract class AbstractUserService {
 
    // Database operations
 
+   abstract setPassword(code: string, password: string, type: "registration" | "reset"): Promise<void>;
    abstract getUserCredentialsByEmail(email: string): Promise<ILimitedUserDetails>;
    abstract getUserJwtCredentialsById(id: string | Types.ObjectId): Promise<IJwtPayload>;
    abstract getRefreshTokenCredentialsFromDB(hashedToken: string): Promise<StoredRefreshToken>;
    abstract replaceRefreshTokenInDB(oldTokenId: string, newToken: string): Promise<void>;
    abstract saveRefreshTokenInDB(tokenCredentials: StoredRefreshTokenBase): Promise<void>;
+   abstract generateLoginCodeAndCheckItInDB(): Promise<string>
+   abstract saveLoginCodeInDB(email: string, code: string): Promise<void>;
 }

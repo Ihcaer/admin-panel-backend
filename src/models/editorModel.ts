@@ -9,6 +9,7 @@ export interface IEditorBase {
 
 export interface IEditor extends IEditorBase, Document {
    password?: string;
+   passwordResetCode?: string;
    createdAt?: Date;
 }
 
@@ -17,7 +18,8 @@ const editorSchema: Schema = new Schema({
    email: { type: String, required: true, unique: true },
    password: { type: String },
    permissions: { type: Number, required: true },
-   loginCode: { type: String },
+   loginCode: { type: String, expires: '2d' },
+   passwordResetCode: { type: String, expires: '10m' },
    createdAt: { type: Date, required: true, default: Date.now }
 });
 

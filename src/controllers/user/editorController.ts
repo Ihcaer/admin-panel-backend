@@ -2,12 +2,11 @@ import { IUserController } from "../../interfaces/userInterfaces.js";
 import { Request, Response, NextFunction } from "express";
 import EditorService from "../../services/user/editorService.js";
 import { ILoginCredentials, ILoginTokens } from "../../types/userTypes.js";
-import jwt from "jsonwebtoken";
-import { MissingLoginCredentialsError } from "../../errors/userErrors.js";
-import { JwtNoTokenError } from "../../errors/jwtCustomErrors.js";
+import { AuthenticationError, MissingLoginCredentialsError } from "../../errors/userErrors.js";
+import EmailService from "../../services/emailService.js";
 
 class EditorController implements IUserController {
-   constructor(private editorService: EditorService) { }
+   constructor(private editorService: EditorService, private emailService: EmailService) { }
 
    async login(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
@@ -25,26 +24,42 @@ class EditorController implements IUserController {
       }
    }
 
-   async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+   async remindPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const email: string = req.body.email;
+      let loginCode: string;
+
       try {
-         const { token } = req.body;
+         if (!email) throw new MissingLoginCredentialsError();
 
-         if (!token) throw new JwtNoTokenError();
-         if (typeof token !== "string") throw new jwt.JsonWebTokenError("Token has wrong type");
+         loginCode = await this.editorService.handleNewLoginCode(email);
+         await this.emailService.sendPasswordResetEmail(email, loginCode);
 
-         const tokens = await this.editorService.validateRefreshToken(token);
-
-         res.status(200).json({ tokens });
+         res.status(200).json({ message: "E-mail with password reset link sent" });
       } catch (error) {
-         if (error instanceof jwt.TokenExpiredError || error instanceof jwt.JsonWebTokenError) {
-            res.status(401).json({ message: error.message });
-         } else {
-            next(error);
-         }
+         next(error);
       }
    }
 
-   async remindPassword(req: Request, res: Response, next: NextFunction): Promise<void> { }
+   async confirmEditorAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { loginCode, password } = req.body;
+      try {
+         if (!loginCode || !password) throw new AuthenticationError();
+         await this.editorService.setPassword(loginCode, password, "registration");
+         res.status(200);
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   async confirmPasswordChangeFromReminder(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { passwordResetCode, password }: { passwordResetCode: string, password: string } = req.body;
+      try {
+         if (!passwordResetCode || !password) throw new AuthenticationError();
+         await this.editorService.setPassword(passwordResetCode, password, "reset");
+      } catch (error) {
+         next(error);
+      }
+   }
 }
 
 export default EditorController;

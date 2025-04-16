@@ -1,10 +1,8 @@
+import { UserNotFoundInDatabaseError } from "../errors/userErrors.js";
 import { IEditor, IEditorBase } from "../models/editorModel.js";
 import EditorRepository from "../repositories/editorRepository.js";
-import { hashInWorker } from "../utils/bcryptUtils.js";
-import crypto from "crypto";
+import { generateCode } from "../utils/commonUtils.js";
 import { RegistrationData } from "./emailService.js";
-
-export const generateCode = (length: number = 10): string => crypto.randomBytes(length).toString('hex');
 
 class EditorsManageService {
    constructor(private editorRepository: EditorRepository) { }
@@ -12,14 +10,8 @@ class EditorsManageService {
    async createEditorAndGetLoginCode(editor: IEditorBase): Promise<string> {
       try {
          let code: string;
-         let uniqueCode: boolean;
 
-         do {
-            code = generateCode();
-            uniqueCode = await this.editorRepository.checkIsEditorExistsByLoginCode(code);
-         } while (uniqueCode);
-
-         editor.loginCode = code;
+         code = editor.loginCode = await this.generateLoginCode();
          await this.editorRepository.createEditor(editor);
 
          return code;
@@ -28,18 +20,28 @@ class EditorsManageService {
       }
    }
 
-   async setPasswordByLoginCode(loginCode: string, password: string): Promise<void> {
-      try {
-         const hashedPassword: string = await hashInWorker(password, 16);
-         await this.editorRepository.setEditorPasswordByLoginCode(loginCode, hashedPassword);
-      } catch (error) {
-         throw error;
-      }
+   async generateLoginCode(): Promise<string> {
+      let code: string;
+      let isCodeUnique: boolean;
+
+      do {
+         code = generateCode(10);
+         isCodeUnique = await this.editorRepository.checkIsEditorExistsByLoginCode(code);
+      } while (isCodeUnique);
+
+      return code;
    }
 
-   async getLoginCode(id: string): Promise<RegistrationData | null> {
+   async getLoginCode(id: string): Promise<RegistrationData> {
       try {
-         let loginCode: RegistrationData | null = await this.editorRepository.findEmailAndLoginCodeById(id);
+         let loginCode: RegistrationData;
+
+         const editorEmail: string | null = await this.editorRepository.findEmailById(id);
+         if (!editorEmail) throw new UserNotFoundInDatabaseError("editor");
+         const code: string = await this.generateLoginCode();
+
+         loginCode = { emailTo: editorEmail, code };
+
          return loginCode;
       } catch (error) {
          throw error;

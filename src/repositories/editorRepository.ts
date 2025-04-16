@@ -13,11 +13,15 @@ class EditorRepository {
    }
 
    async setEditorPasswordByLoginCode(loginCode: string, password: string): Promise<void> {
-      await Editor.updateOne({ loginCode }, { password });
+      await Editor.updateOne({ loginCode }, { $set: { password }, $unset: { loginCode } });
    }
 
-   async findEmailAndLoginCodeById(id: string): Promise<RegistrationData | null> {
-      return Editor.findById(id, 'email loginCode -_id');
+   async setEditorPasswordByPasswordResetCode(passwordResetCode: string, password: string): Promise<void> {
+      await Editor.updateOne({ passwordResetCode }, { $set: { password }, $unset: { passwordResetCode } });
+   }
+
+   async findEmailById(id: string): Promise<string | null> {
+      return Editor.findById(id, 'email -_id');
    }
 
    async showAllEditorsDetails(): Promise<IEditor[]> {
@@ -34,6 +38,10 @@ class EditorRepository {
 
    async findEditorPermissionsById(id: string): Promise<number | null> {
       return Editor.findById(id, '-_id permissions');
+   }
+
+   async saveEditorLoginCode(id: string, code: string): Promise<void> {
+      await Editor.updateOne({ _id: id }, { passwordResetCode: code });
    }
 }
 

@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import Editor, { IEditor, IEditorBase } from "../../../src/models/editorModel.js";
 import { RegistrationData } from "../../../src/services/emailService.js";
 import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../../src/types/userTypes.js";
+import { TestError } from "../../../src/errors/indexErrors.js";
 
 export class EditorRepositoryMock {
    editors: IEditor[] = [];
@@ -75,5 +76,11 @@ export class EditorRepositoryMock {
       const editor: IEditor = this.editors.find(editor => editor.id === id);
       const editorPermissions: number | null = editor ? editor.permissions : null;
       return editorPermissions;
+   }
+
+   async saveEditorLoginCode(index: string, code: string): Promise<void> {
+      const email: string = `test${index}@email.com`;
+      const editor: IEditor = this.editors.find(editor => editor.email === email);
+      editor.loginCode = code;
    }
 }

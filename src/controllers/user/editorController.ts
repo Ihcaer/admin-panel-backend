@@ -40,22 +40,22 @@ class EditorController implements IUserController {
       }
    }
 
+   async confirmPasswordChangeFromReminder(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { passwordResetCode, password }: { passwordResetCode: string, password: string } = req.body;
+      try {
+         if (!passwordResetCode || !password) throw new AuthenticationError();
+         await this.editorService.setPassword(passwordResetCode, password, "reset");
+      } catch (error) {
+         next(error);
+      }
+   }
+
    async confirmEditorAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
       const { loginCode, password } = req.body;
       try {
          if (!loginCode || !password) throw new AuthenticationError();
          await this.editorService.setPassword(loginCode, password, "registration");
          res.status(200);
-      } catch (error) {
-         next(error);
-      }
-   }
-
-   async confirmPasswordChangeFromReminder(req: Request, res: Response, next: NextFunction): Promise<void> {
-      const { passwordResetCode, password }: { passwordResetCode: string, password: string } = req.body;
-      try {
-         if (!passwordResetCode || !password) throw new AuthenticationError();
-         await this.editorService.setPassword(passwordResetCode, password, "reset");
       } catch (error) {
          next(error);
       }

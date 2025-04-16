@@ -7,6 +7,9 @@ import { IJwtPayload } from "../../utils/jwtUtils.js";
 import { StoredRefreshToken, StoredRefreshTokenBase } from "../../interfaces/storedRefreshTokenInterface.js";
 import { JwtRefreshTokenNotFoundError } from "../../errors/jwtCustomErrors.js";
 import { AdminPanelPermissions } from "../../middlewares/adminPanelPermissionsMiddleware.js";
+import { generateCode } from "../../utils/commonUtils.js";
+import { hashInWorker } from "../../utils/bcryptUtils.js";
+import { CriticalError } from "../../errors/indexErrors.js";
 
 class EditorService extends AbstractUserService {
    constructor(private editorRepository: EditorRepository, private refreshTokenRepository: EditorRefreshTokenRepository) {
@@ -40,6 +43,25 @@ class EditorService extends AbstractUserService {
 
    // Editor db actions
 
+   async setPassword(code: string, password: string, type: "registration" | "reset"): Promise<void> {
+      try {
+         const hashedPassword: string = await hashInWorker(password, 16);
+
+         switch (type) {
+            case "registration":
+               await this.editorRepository.setEditorPasswordByLoginCode(code, hashedPassword);
+               break;
+            case "reset":
+               await this.editorRepository.setEditorPasswordByPasswordResetCode(code, hashedPassword);
+               break;
+            default:
+               throw new CriticalError("Wrong password set type");
+         }
+      } catch (error) {
+         throw error;
+      }
+   }
+
    async getUserCredentialsByEmail(email: string): Promise<ILimitedUserDetails> {
       try {
          const userCredentials: ILimitedUserDetails | null = await this.editorRepository.findEditorCredentialsByEmail(email);
@@ -70,6 +92,29 @@ class EditorService extends AbstractUserService {
          outcome = (editorPermits !== null && ((editorPermits & permissionToCheck) === editorPermits)) ? true : false;
 
          return outcome;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async generateLoginCodeAndCheckItInDB(): Promise<string> {
+      try {
+         let code: string;
+         let isCodeUnique: boolean;
+
+         do {
+            code = generateCode(8);
+            isCodeUnique = await this.editorRepository.checkIsEditorExistsByLoginCode(code);
+         } while (isCodeUnique);
+         return code;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async saveLoginCodeInDB(userId: string, code: string): Promise<void> {
+      try {
+         await this.editorRepository.saveEditorLoginCode(userId, code);
       } catch (error) {
          throw error;
       }

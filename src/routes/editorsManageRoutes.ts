@@ -13,7 +13,7 @@ const emailService = new EmailService();
 const editorsManagementController = new EditorsManagementController(editorManageService, emailService);
 
 editorsManageRoutes.post('/create', restMiddleware, editorsManagementController.createEditor.bind(editorsManagementController));
-editorsManageRoutes.put('/confirm', restMiddleware, editorsManagementController.confirmEditorAccount.bind(editorsManagementController));
+editorsManageRoutes.put('/resend-login-code', restMiddleware, editorsManagementController.resendEmailWithLoginCode.bind(editorsManagementController));
 editorsManageRoutes.get('/all', restMiddleware, editorsManagementController.showAllUsernames.bind(editorsManagementController));
 
 export default editorsManageRoutes;

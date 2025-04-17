@@ -42,6 +42,16 @@ export class EditorRepositoryMock {
       return data;
    }
 
+   async setEditorPasswordByPasswordResetCode(passwordResetCode: string, password: string): Promise<void> {
+      console.log("Password set");
+   }
+
+   async findEmailById(id: string): Promise<string | null> {
+      const editor: IEditor = this.editors.find(editor => editor._id === id);
+      const email: string = editor.email;
+      return email;
+   }
+
    async showAllEditorsDetails(): Promise<IEditor[]> {
       const editorsDetails: IEditor[] = this.editors.map(editor => {
          const updatedEditor = { ...editor.toObject() };

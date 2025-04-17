@@ -4,20 +4,14 @@ import EditorsManageService from "../../services/editorsManageService.js";
 import EmailService, { RegistrationData } from "../../services/emailService.js";
 import { AuthenticationError, NoUserDataError, UserNotFoundInDatabaseError } from "../../errors/userErrors.js";
 
-interface IErrorResponse {
-   status: string;
-   message: string;
-}
-
 class EditorsManagementController {
    constructor(private editorsManageService: EditorsManageService, private emailService: EmailService) { }
 
-   errorResponse(message: string): IErrorResponse {
-      return { status: "error", message };
-   }
-
    async createEditor(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
+         if (!req.body.permission || !(Array.isArray(req.body.permission) && req.body.permission.every((item: string) => typeof item === 'string'))) throw new NoUserDataError();
+
+         req.body.permission = await this.editorsManageService.adaptPermissions(req.body.permissions);
          const editor: IEditorBase = req.body;
          if (!editor) throw new NoUserDataError();
 

@@ -10,7 +10,6 @@ export enum AdminPanelPermissions {
    SUPER_ADMIN = 0 << 0,
    EDITORS_MANAGE = 1 << 0,
    // Max permission is 1 << 30
-
 }
 
 const adminPanelPermissionsMiddleware = async (requiredPermit: keyof typeof AdminPanelPermissions): Promise<RequestHandler> => {

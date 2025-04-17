@@ -1,4 +1,5 @@
-import { PermissionsAuthenticationError, UserNotFoundInDatabaseError } from "../errors/userErrors.js";
+import { CriticalError } from "../errors/indexErrors.js";
+import { UserNotFoundInDatabaseError } from "../errors/userErrors.js";
 import { AdminPanelPermissions } from "../middlewares/adminPanelPermissionsMiddleware.js";
 import { IEditor, IEditorBase } from "../models/editorModel.js";
 import EditorRepository from "../repositories/editorRepository.js";
@@ -10,8 +11,9 @@ class EditorsManageService {
 
    async adaptPermissions(permissions: string[]): Promise<number> {
       return permissions.reduce((accumulator, currentPermission) => {
+         if (!(currentPermission in AdminPanelPermissions)) throw new CriticalError("Wrong permission");
          const permissionValue: number = AdminPanelPermissions[currentPermission as keyof typeof AdminPanelPermissions];
-         if (permissionValue === AdminPanelPermissions.SUPER_ADMIN) throw new PermissionsAuthenticationError();
+         if (permissionValue === AdminPanelPermissions.SUPER_ADMIN) throw new CriticalError("Can't add super admin permission");
          return accumulator + permissionValue;
       }, 0);
    }

@@ -76,7 +76,7 @@ class EditorsManageService {
 
    async adaptPermissions(permissions: string[]): Promise<number> {
       return permissions.reduce((accumulator, currentPermission) => {
-         if (!(currentPermission in AdminPanelPermissions)) throw new CriticalError("Wrong permission");
+         if (!(currentPermission in AdminPanelPermissions)) throw new CriticalError("Invalid permissions: " + currentPermission);
          const permissionValue: number = AdminPanelPermissions[currentPermission as keyof typeof AdminPanelPermissions];
          if (permissionValue === AdminPanelPermissions.SUPER_ADMIN) throw new CriticalError("Can't add super admin permission");
          return accumulator + permissionValue;

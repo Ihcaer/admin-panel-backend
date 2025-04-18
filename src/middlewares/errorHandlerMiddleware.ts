@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { addError, clearState, getState, isErrorRegistered } from '../store/store.js';
 import EmailService from '../services/emailService.js';
 import { CustomError, NonCriticalError } from '../errors/indexErrors.js';
@@ -25,7 +25,7 @@ const reportError = (error: string): void => {
    }, 10 * 60 * 1000);
 };
 
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
+const errorHandler = (err: Error, res: Response): void => {
    console.error(err.stack);
 
    if (!(err instanceof NonCriticalError) || !(err instanceof TokenExpiredError)) reportError(err.message);

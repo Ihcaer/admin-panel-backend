@@ -4,7 +4,7 @@ import EditorsManageService from "../../services/editorsManageService.js";
 import EmailService, { RegistrationData } from "../../services/emailService.js";
 import { AuthenticationError, NoUserDataError, UserNotFoundInDatabaseError } from "../../errors/userErrors.js";
 
-class EditorsManagementController {
+class EditorsManageController {
    constructor(private editorsManageService: EditorsManageService, private emailService: EmailService) { }
 
    async createEditor(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -64,6 +64,31 @@ class EditorsManagementController {
          next(error);
       }
    }
+
+   async changeEditorPermissions(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { id, permissions }: { id: string, permissions: string[] } = req.body;
+      try {
+         if (!id || !permissions || !Array.isArray(permissions)) throw new NoUserDataError();
+
+         const newPermissions: number = await this.editorsManageService.adaptPermissions(permissions);
+         await this.editorsManageService.changePermissions(id, newPermissions);
+
+         res.status(200);
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   async changeEditorUsername(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { id, username }: { id: string, username: string } = req.body;
+      try {
+         if (!id || !username) throw new NoUserDataError();
+         await this.editorsManageService.changeUsername(id, username);
+         res.status(200);
+      } catch (error) {
+         next(error);
+      }
+   }
 }
 
-export default EditorsManagementController;
+export default EditorsManageController;

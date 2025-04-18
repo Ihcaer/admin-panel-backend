@@ -9,8 +9,9 @@ import { RegistrationData } from "./emailService.js";
 class EditorsManageService {
    constructor(private editorRepository: EditorRepository) { }
 
-   async getAllPermissionsArray(): Promise<string[]> {
-      return Object.keys(AdminPanelPermissions) as (keyof typeof AdminPanelPermissions)[];
+   getAllPermissionsArray(): string[] {
+      const permissionsArray: string[] = Object.keys(AdminPanelPermissions).filter(key => isNaN(Number(key)) && key !== "SUPER_ADMIN");
+      return permissionsArray;
    }
 
    async adaptPermissions(permissions: string[]): Promise<number> {

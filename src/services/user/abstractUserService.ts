@@ -1,5 +1,5 @@
 import { ILimitedUserDetails, ILoginCredentials, ILoginTokens } from "../../types/userTypes.js";
-import { hashInWorker, verifyHashedData } from "../../utils/bcryptUtils.js";
+import { verifyHashedData } from "../../utils/bcryptUtils.js";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { generateToken, IJwtPayload, TokenType, verifyToken } from "../../utils/jwtUtils.js";
 import crypto from "crypto";
@@ -7,7 +7,6 @@ import { StoredRefreshToken, StoredRefreshTokenBase } from "../../interfaces/sto
 import { Types } from "mongoose";
 import { LoginCredentialsIncorrectError } from "../../errors/userErrors.js";
 import { HashingTokenError } from "../../errors/jwtCustomErrors.js";
-import { generateCode } from "../../utils/commonUtils.js";
 
 /**
  * Abstract service handling login operations.

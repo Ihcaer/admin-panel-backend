@@ -38,6 +38,10 @@ class EditorRepository {
       await Editor.updateOne({ passwordResetCode }, { $set: { password }, $unset: { passwordResetCode } });
    }
 
+   async setPasswordById(id: string, password: string): Promise<void> {
+      await Editor.updateOne({ _id: id }, { password });
+   }
+
    async saveEditorLoginCode(id: string, code: string): Promise<void> {
       await Editor.updateOne({ _id: id }, { passwordResetCode: code });
    }

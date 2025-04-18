@@ -17,6 +17,6 @@ const editorController: EditorController = new EditorController(editorService, e
 editorRoutes.post('/login', restMiddleware, editorController.login.bind(editorController));
 editorRoutes.put('/remind-password', restMiddleware, editorController.remindPassword.bind(editorController));
 editorRoutes.put('/confirm-account', restMiddleware, editorController.confirmEditorAccount.bind(editorController));
-editorRoutes.put('/confirm-password-remind', restMiddleware, editorController.confirmPasswordChangeFromReminder.bind(editorController));
+editorRoutes.put('/confirm-password-reminder', restMiddleware, editorController.confirmPasswordChangeFromReminder.bind(editorController));
 
 export default editorRoutes;

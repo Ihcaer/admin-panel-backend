@@ -45,6 +45,8 @@ class EditorController implements IUserController {
       try {
          if (!passwordResetCode || !password) throw new AuthenticationError();
          await this.editorService.setPassword(passwordResetCode, password, "reset");
+
+         res.status(200).json({ message: "Password changed" });
       } catch (error) {
          next(error);
       }

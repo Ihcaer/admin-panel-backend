@@ -9,6 +9,10 @@ import { RegistrationData } from "./emailService.js";
 class EditorsManageService {
    constructor(private editorRepository: EditorRepository) { }
 
+   async getAllPermissionsArray(): Promise<string[]> {
+      return Object.keys(AdminPanelPermissions) as (keyof typeof AdminPanelPermissions)[];
+   }
+
    async adaptPermissions(permissions: string[]): Promise<number> {
       return permissions.reduce((accumulator, currentPermission) => {
          if (!(currentPermission in AdminPanelPermissions)) throw new CriticalError("Wrong permission");

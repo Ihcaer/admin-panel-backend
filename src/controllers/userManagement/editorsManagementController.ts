@@ -55,6 +55,15 @@ class EditorsManagementController {
          next(error);
       }
    }
+
+   async sendAllPermissions(req: Request, res: Response, next: NextFunction): Promise<void> {
+      try {
+         const permissions: string[] = await this.editorsManageService.getAllPermissionsArray();
+         res.status(200).json({ permissions });
+      } catch (error) {
+         next(error);
+      }
+   }
 }
 
 export default EditorsManagementController;

@@ -93,4 +93,24 @@ export class EditorRepositoryMock {
       const editor: IEditor = this.editors.find(editor => editor.email === email);
       editor.loginCode = code;
    }
+
+   async replacePermissions(id: string = "0", newPermissions: number): Promise<void> {
+      id = this.idPrefix + id;
+      const editor: IEditor = this.editors.find(editor => editor.id === id);
+
+      console.log("Old editor's data:\n" + this.replaceDataLog("permissions", id, editor.permissions));
+      editor.permissions = newPermissions;
+      console.log("Updated editor's data:\n" + this.replaceDataLog("permissions", id, editor.permissions));
+   }
+
+   async replaceUsername(id: string = "0", newUsername: string): Promise<void> {
+      id = this.idPrefix + id;
+      const editor: IEditor = this.editors.find(editor => editor.id === id);
+
+      console.log("Old editor's data:\n" + this.replaceDataLog("username", id, editor.username));
+      editor.username = newUsername;
+      console.log("Updated editor's data:\n" + this.replaceDataLog("username", id, newUsername));
+   }
+
+   replaceDataLog = (type: "permissions" | "username", id: string, changedData: number | string) => `id: ${id} ${type}: ${changedData}`;
 }

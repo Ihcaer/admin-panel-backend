@@ -40,4 +40,34 @@ describe('EditorsManageService', () => {
          }
       });
    });
+
+   describe('changePermissions', () => {
+      it('should replace permissions correctly', async () => {
+         console.log("--- Changing permissions test started ---");
+         const editorIndex: string = "1";
+         const editorNewPermissions: number = 1;
+         try {
+            await editorsManageService.changePermissions(editorIndex, editorNewPermissions);
+            assert.ok(true, "Permissions changed");
+         } catch (error) {
+            assert.fail("Method threw an error: " + error.message);
+         }
+         console.log("--- Changing permissions test test ended ---\n");
+      });
+   });
+
+   describe('changeUsername', () => {
+      it('should replace username correctly', async () => {
+         console.log("--- Changing username test started ---");
+         const editorIndex: string = "1";
+         const editorNewUsername: string = "newUsername";
+         try {
+            await editorsManageService.changeUsername(editorIndex, editorNewUsername);
+            assert.ok(true, "Username changed");
+         } catch (error) {
+            assert.fail("Method threw an error: " + error.message);
+         }
+         console.log("--- Changing username test test ended ---\n");
+      });
+   });
 });

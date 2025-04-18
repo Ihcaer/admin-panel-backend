@@ -1,5 +1,4 @@
 import Editor, { IEditor, IEditorBase } from "../models/editorModel.js";
-import { RegistrationData } from "../services/emailService.js";
 import { EditorUsernameAndPermits, ILimitedUserDetails } from "../types/userTypes.js";
 
 class EditorRepository {
@@ -7,18 +6,7 @@ class EditorRepository {
       await Editor.create(editor);
    }
 
-   async checkIsEditorExistsByLoginCode(loginCode: string): Promise<boolean> {
-      const exists: boolean = !!(Editor.exists({ loginCode }));
-      return exists;
-   }
-
-   async setEditorPasswordByLoginCode(loginCode: string, password: string): Promise<void> {
-      await Editor.updateOne({ loginCode }, { $set: { password }, $unset: { loginCode } });
-   }
-
-   async setEditorPasswordByPasswordResetCode(passwordResetCode: string, password: string): Promise<void> {
-      await Editor.updateOne({ passwordResetCode }, { $set: { password }, $unset: { passwordResetCode } });
-   }
+   // Find
 
    async findEmailById(id: string): Promise<string | null> {
       return Editor.findById(id, 'email -_id');
@@ -40,8 +28,35 @@ class EditorRepository {
       return Editor.findById(id, '-_id permissions');
    }
 
+   // Set
+
+   async setEditorPasswordByLoginCode(loginCode: string, password: string): Promise<void> {
+      await Editor.updateOne({ loginCode }, { $set: { password }, $unset: { loginCode } });
+   }
+
+   async setEditorPasswordByPasswordResetCode(passwordResetCode: string, password: string): Promise<void> {
+      await Editor.updateOne({ passwordResetCode }, { $set: { password }, $unset: { passwordResetCode } });
+   }
+
    async saveEditorLoginCode(id: string, code: string): Promise<void> {
       await Editor.updateOne({ _id: id }, { passwordResetCode: code });
+   }
+
+   // Replace
+
+   async replacePermissions(id: string, newPermissions: number): Promise<void> {
+      await Editor.updateOne({ _id: id }, { permissions: newPermissions });
+   }
+
+   async replaceUsername(id: string, newUsername: string): Promise<void> {
+      await Editor.updateOne({ _id: id }, { username: newUsername });
+   }
+
+   // Check
+
+   async checkIsEditorExistsByLoginCode(loginCode: string): Promise<boolean> {
+      const exists: boolean = !!(Editor.exists({ loginCode }));
+      return exists;
    }
 }
 

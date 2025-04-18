@@ -17,7 +17,6 @@ describe('Editor service', () => {
    let mockEditorRefreshTokenRepository: EditorRefreshTokenRepository;
 
    let idPrefix: string;
-   let emailPrefix: string;
 
    beforeEach(() => {
       // console.log("\n--- Test Start ---");

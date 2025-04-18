@@ -52,7 +52,7 @@ export class NoUserDataError extends NonCriticalError {
    constructor() {
       super();
       this.name = this.constructor.name;
-      this.message = "No user data";
+      this.message = "Incomplete user data";
       this.statusCode = 400;
    }
 }

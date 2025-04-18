@@ -97,7 +97,7 @@ class EditorService extends AbstractUserService {
       }
    }
 
-   async generateLoginCodeAndCheckItInDB(): Promise<string> {
+   async generateLoginCode(): Promise<string> {
       try {
          let code: string;
          let isCodeUnique: boolean;

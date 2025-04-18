@@ -113,4 +113,8 @@ export class EditorRepositoryMock {
    }
 
    replaceDataLog = (type: "permissions" | "username", id: string, changedData: number | string) => `id: ${id} ${type}: ${changedData}`;
+
+   async replacePassword(id: string, newPassword: string): Promise<void> {
+      console.log("Password replaced");
+   }
 }

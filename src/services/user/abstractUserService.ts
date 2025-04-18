@@ -1,5 +1,5 @@
 import { ILimitedUserDetails, ILoginCredentials, ILoginTokens } from "../../types/userTypes.js";
-import { verifyHashedData } from "../../utils/bcryptUtils.js";
+import { hashInWorker, verifyHashedData } from "../../utils/bcryptUtils.js";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { generateToken, IJwtPayload, TokenType, verifyToken } from "../../utils/jwtUtils.js";
 import crypto from "crypto";
@@ -46,7 +46,7 @@ export abstract class AbstractUserService {
    async handleNewLoginCode(email: string): Promise<string> {
       let passwordResetCode: string;
 
-      passwordResetCode = await this.generateLoginCodeAndCheckItInDB();
+      passwordResetCode = await this.generateLoginCode();
       await this.saveLoginCodeInDB(email, passwordResetCode);
 
       return passwordResetCode;
@@ -138,6 +138,6 @@ export abstract class AbstractUserService {
    abstract getRefreshTokenCredentialsFromDB(hashedToken: string): Promise<StoredRefreshToken>;
    abstract replaceRefreshTokenInDB(oldTokenId: string, newToken: string): Promise<void>;
    abstract saveRefreshTokenInDB(tokenCredentials: StoredRefreshTokenBase): Promise<void>;
-   abstract generateLoginCodeAndCheckItInDB(): Promise<string>
+   abstract generateLoginCode(): Promise<string>;
    abstract saveLoginCodeInDB(email: string, code: string): Promise<void>;
 }

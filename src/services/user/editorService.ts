@@ -43,17 +43,19 @@ class EditorService extends AbstractUserService {
 
    // Editor db actions
 
-   async setPassword(code: string, password: string, type: "registration" | "reset"): Promise<void> {
+   async setPassword(filter: string, password: string, type: "registration" | "reset" | "change"): Promise<void> {
       try {
          const hashedPassword: string = await hashInWorker(password, 16);
 
          switch (type) {
             case "registration":
-               await this.editorRepository.setEditorPasswordByLoginCode(code, hashedPassword);
+               await this.editorRepository.setEditorPasswordByLoginCode(filter, hashedPassword);
                break;
             case "reset":
-               await this.editorRepository.setEditorPasswordByPasswordResetCode(code, hashedPassword);
+               await this.editorRepository.setEditorPasswordByPasswordResetCode(filter, hashedPassword);
                break;
+            case "change":
+               await this.editorRepository.setPasswordById(filter, hashedPassword);
             default:
                throw new CriticalError("Wrong password set type");
          }

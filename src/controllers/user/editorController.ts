@@ -2,7 +2,7 @@ import { IUserController } from "../../interfaces/userInterfaces.js";
 import { Request, Response, NextFunction } from "express";
 import EditorService from "../../services/user/editorService.js";
 import { ILoginCredentials, ILoginTokens } from "../../types/userTypes.js";
-import { AuthenticationError, MissingLoginCredentialsError } from "../../errors/userErrors.js";
+import { AuthenticationError, MissingLoginCredentialsError, NoUserDataError } from "../../errors/userErrors.js";
 import EmailService from "../../services/emailService.js";
 
 class EditorController implements IUserController {
@@ -58,6 +58,18 @@ class EditorController implements IUserController {
          if (!loginCode || !password) throw new AuthenticationError();
          await this.editorService.setPassword(loginCode, password, "registration");
          res.status(200);
+      } catch (error) {
+         next(error);
+      }
+   }
+
+   async changePassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+      const { id, newPassword }: { id: string, newPassword: string } = req.body;
+      try {
+         if (!newPassword) throw new NoUserDataError();
+
+         await this.editorService.setPassword(id, newPassword, "change");
+         res.status(200).json({ message: "Password changed" });
       } catch (error) {
          next(error);
       }

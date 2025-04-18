@@ -15,5 +15,6 @@ const editorsManagementController = new EditorsManagementController(editorManage
 editorsManageRoutes.post('/create', restMiddleware, editorsManagementController.createEditor.bind(editorsManagementController));
 editorsManageRoutes.put('/resend-login-code', restMiddleware, editorsManagementController.resendEmailWithLoginCode.bind(editorsManagementController));
 editorsManageRoutes.get('/all', restMiddleware, editorsManagementController.showAllUsernames.bind(editorsManagementController));
+editorsManageRoutes.get('get-all-permissions', restMiddleware, editorsManagementController.sendAllPermissions.bind(editorsManagementController));
 
 export default editorsManageRoutes;

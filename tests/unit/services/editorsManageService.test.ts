@@ -14,6 +14,14 @@ describe('EditorsManageService', () => {
       editorsManageService = new EditorsManageService(mockEditorRepository);
    });
 
+   describe('getAllPermissionsArray', () => {
+      it('should return table with all permissions', async () => {
+         const permissionsTable: string[] = ["EDITORS_MANAGE"];
+         const result: string[] = editorsManageService.getAllPermissionsArray();
+         assert.deepStrictEqual(result, permissionsTable);
+      });
+   });
+
    describe('adaptPermissions', () => {
       it('should return correctly converted permission number', async () => {
          const permissionsArray: (keyof typeof AdminPanelPermissions)[] = ['EDITORS_MANAGE'];

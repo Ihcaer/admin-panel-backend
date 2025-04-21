@@ -1,2 +1,1 @@
-import './services/editorService.test.js';
-import './services/editorsManageService.test.js';
+import "./user/user-tests-index.js";

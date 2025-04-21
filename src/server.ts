@@ -1,9 +1,9 @@
 import express, { Application } from 'express';
-import serverConfig from './config/server.config.js';
-import errorHandler from './middlewares/errorHandlerMiddleware.js';
+import serverConfig from './shared/config/server.config.js';
+import errorHandler from './errorHandlerMiddleware.js';
 import compression from 'compression';
-import registerRoutes from './routes/indexRoutes.js';
-import connectDB from './config/db.config.js';
+import registerRoutes from './indexRoutes.js';
+import connectDB from './shared/config/db.config.js';
 
 const server: Application = express();
 const port: number = serverConfig.port;

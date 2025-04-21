@@ -1,8 +1,8 @@
 import { beforeEach, describe, it } from "node:test";
-import EditorRepository from "../../../src/repositories/editorRepository.js";
-import EditorsManageService from "../../../src/services/editorsManageService.js";
+import EditorRepository from "../../../src/user/editors/editor/editorRepository.js";
+import EditorsManageService from "../../../src/user/editors/editors-manage/editorsManageService.js";
 import { EditorRepositoryMock } from "../mock/editorRepositoryMock.js";
-import { AdminPanelPermissions } from "../../../src/middlewares/adminPanelPermissionsMiddleware.js";
+import { AdminPanelPermissions } from "../../../src/user/editors/middleware/adminPanelPermissionsMiddleware.js";
 import assert from 'node:assert/strict';
 
 describe('EditorsManageService', () => {

@@ -1,8 +1,10 @@
 import { Types } from "mongoose";
-import { StoredRefreshToken, StoredRefreshTokenBase } from "../../../src/interfaces/storedRefreshTokenInterface.js";
-import EditorRefreshToken from "../../../src/models/editorRefreshTokenModel.js";
-import { generateToken, IJwtPayload } from "../../../src/utils/jwtUtils.js";
+
+import EditorRefreshToken from "../../../src/user/editors/refresh-tokens/editorRefreshTokenModel.js";
+
 import crypto from "crypto";
+import { generateToken, IJwtPayload } from "../../../src/shared/utils/jwtUtils.js";
+import { StoredRefreshToken, StoredRefreshTokenBase } from "../../../src/user/common/interfaces/storedRefreshTokenInterface.js";
 
 export class EditorRefreshRepositoryMock {
    refreshTokens: StoredRefreshToken[] = [];

@@ -1,8 +1,7 @@
 import { Types } from "mongoose";
-import Editor, { IEditor, IEditorBase } from "../../../src/models/editorModel.js";
-import { RegistrationData } from "../../../src/services/emailService.js";
-import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../../src/types/userTypes.js";
-import { TestError } from "../../../src/errors/indexErrors.js";
+import { RegistrationData } from "../../../src/shared/services/emailService.js";
+import Editor, { IEditor, IEditorBase } from "../../../src/user/editors/editor/editorModel.js";
+import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../../src/user/common/types/userTypes.js";
 
 export class EditorRepositoryMock {
    editors: IEditor[] = [];
@@ -44,6 +43,13 @@ export class EditorRepositoryMock {
 
    async setEditorPasswordByPasswordResetCode(passwordResetCode: string, password: string): Promise<void> {
       console.log("Password set");
+   }
+
+   async setPasswordById(id: string, password: string): Promise<void> {
+      id = this.idPrefix + id;
+      const editor: IEditor = this.editors.find(editor => editor._id === id);
+      editor.password = password;
+      console.log("Password changed:", { id: editor.id, password: editor.password });
    }
 
    async findEmailById(id: string): Promise<string | null> {

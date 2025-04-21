@@ -1,17 +1,15 @@
 import test, { afterEach, beforeEach, describe, mock } from "node:test";
-import EditorService from "../../../src/user/editors/editor/editorService.js";
+import EditorService from "../../../../../src/user/editors/editor/editorService.js";
 import { EditorRepositoryMock } from "../mock/editorRepositoryMock.js";
 import { EditorRefreshRepositoryMock } from "../mock/editorRefreshTokenRepositoryMock.js";
 import assert from 'node:assert/strict';
-import EditorRepository from "../../../src/user/editors/editor/editorRepository.js";
-import EditorRefreshTokenRepository from "../../../src/user/editors/refresh-tokens/editorRefreshTokenRepository.js";
-
-
+import EditorRepository from "../../../../../src/user/editors/editor/editorRepository.js";
+import EditorRefreshTokenRepository from "../../../../../src/user/editors/refresh-tokens/editorRefreshTokenRepository.js";
 import crypto from "crypto";
-import { generateToken, IJwtPayload, verifyToken } from "../../../src/shared/utils/jwtUtils.js";
-import { StoredRefreshToken, StoredRefreshTokenBase } from "../../../src/user/common/interfaces/storedRefreshTokenInterface.js";
-import { ILimitedUserDetails } from "../../../src/user/common/types/userTypes.js";
-import { generateCode } from "../../../src/shared/utils/commonUtils.js";
+import { ILimitedUserDetails } from "../../../../../src/user/common/types/userTypes.js";
+import { generateToken, IJwtPayload, verifyToken } from "../../../../../src/shared/utils/jwtUtils.js";
+import { StoredRefreshToken, StoredRefreshTokenBase } from "../../../../../src/user/common/interfaces/storedRefreshTokenInterface.js";
+import { generateCode } from "../../../../../src/shared/utils/commonUtils.js";
 
 describe('Editor service', () => {
    let editorService: EditorService;

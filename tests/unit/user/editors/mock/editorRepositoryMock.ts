@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { RegistrationData } from "../../../src/shared/services/emailService.js";
-import Editor, { IEditor, IEditorBase } from "../../../src/user/editors/editor/editorModel.js";
-import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../../src/user/common/types/userTypes.js";
+import { RegistrationData } from "../../../../../src/shared/services/emailService.js";
+import Editor, { IEditor, IEditorBase } from "../../../../../src/user/editors/editor/editorModel.js";
+import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../../../../src/user/common/types/userTypes.js";
 
 export class EditorRepositoryMock {
    editors: IEditor[] = [];

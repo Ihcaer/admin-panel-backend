@@ -104,7 +104,7 @@ export abstract class AbstractUserService {
       }
    }
 
-   // General token operations
+   // Token general operations
 
    async generateTokens(userCredentials: ILimitedUserDetails | IJwtPayload): Promise<ILoginTokens> {
       const tokenPayload: IJwtPayload = { id: userCredentials.id.toString(), username: userCredentials.username, permissions: userCredentials.permissions };

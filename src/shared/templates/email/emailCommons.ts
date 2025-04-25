@@ -2,7 +2,8 @@ import { frontendData } from "../../config/frontendData.config.js";
 
 const getEmailCaption = (): string => {
    const currentYear: number = new Date().getFullYear();
-   const caption = `Wiadomość wygenerowana automatycznie. Prosimy na nią nie odpowiadać.<br>&copy;${currentYear} Agencja Yello`;
+   const companyName: string = frontendData.companyName;
+   const caption = `Wiadomość wygenerowana automatycznie. Prosimy na nią nie odpowiadać.<br>&copy;${currentYear} ${companyName}`;
    return caption;
 };
 

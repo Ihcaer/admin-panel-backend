@@ -10,6 +10,7 @@ class EditorsManageService {
    constructor(private editorRepository: EditorRepository) { }
 
    // Editor creation
+
    async createEditorAndGetLoginCode(editor: IEditorBase): Promise<string> {
       try {
          let code: string;

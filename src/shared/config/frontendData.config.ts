@@ -1,11 +1,12 @@
-interface YelloLogo {
+type Logo = {
    href: string;
    src: string;
 }
 
-interface FrontendData {
+type FrontendData = {
+   companyName: string;
    domain: string;
-   logo: YelloLogo;
+   logo: Logo;
    accountActivationPaths: {
       editor: string;
    }
@@ -17,6 +18,7 @@ interface FrontendData {
 const domain: string = String(process.env.FRONTEND_DOMAIN);
 
 export const frontendData: FrontendData = {
+   companyName: String(process.env.COMPANY_NAME),
    domain: domain,
    logo: { href: domain, src: domain + "/" + String(process.env.FRONTEND_LOGO_PATH) },
    accountActivationPaths: { editor: domain + "/" + String(process.env.FRONTEND_EDITOR_REGISTRATION_PATH) },

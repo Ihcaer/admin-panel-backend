@@ -3,13 +3,13 @@ import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../common/type
 import EditorRepository from "./editorRepository.js";
 import EditorRefreshTokenRepository from "../refresh-tokens/editorRefreshTokenRepository.js";
 import { UserNotFoundInDatabaseError } from "../../common/errors/userErrors.js";
-import { IJwtPayload } from "../../../shared/utils/jwtUtils.js";
 import { StoredRefreshToken, StoredRefreshTokenBase } from "../../common/interfaces/storedRefreshTokenInterface.js";
 import { JwtRefreshTokenNotFoundError } from "../../common/errors/jwtCustomErrors.js";
 import { AdminPanelPermissions } from "../middleware/adminPanelPermissionsMiddleware.js";
 import { generateCode } from "../../../shared/utils/commonUtils.js";
 import { hashInWorker } from "../../../shared/utils/bcryptUtils.js";
 import { CriticalError } from "../../../shared/error/indexErrors.js";
+import { IJwtPayload } from "../../common/utils/jwtUtils.js";
 
 class EditorService extends AbstractUserService {
    constructor(private editorRepository: EditorRepository, private refreshTokenRepository: EditorRefreshTokenRepository) {

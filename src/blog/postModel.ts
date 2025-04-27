@@ -1,11 +1,11 @@
 import { Document, model, Schema, Types } from "mongoose";
-import { IEditor } from "../user/editors/editor/editorModel.js";
+import { EditorDocument } from "../user/editors/editor/editorModel.js";
 
-interface IPost extends Document {
+interface PostDocument extends Document {
    title: string;
    subtitle?: string;
    content: string;
-   author: Types.ObjectId | IEditor;
+   author: Types.ObjectId | EditorDocument;
    imageUri: string;
    tags: string[];
    readingTime?: Date;
@@ -23,6 +23,6 @@ const postSchema: Schema = new Schema({
    createdAt: { type: Date, default: Date.now }
 });
 
-const Post = model<IPost>("Post", postSchema);
+const Post = model<PostDocument>("Post", postSchema);
 
 export default Post;

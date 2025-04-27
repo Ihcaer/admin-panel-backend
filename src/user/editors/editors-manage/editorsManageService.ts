@@ -3,15 +3,15 @@ import { RegistrationData } from "../../../shared/services/emailService.js";
 import { generateCode } from "../../../shared/utils/commonUtils.js";
 import { UserNotFoundInDatabaseError } from "../../common/errors/userErrors.js";
 import { AdminPanelPermissions } from "../middleware/adminPanelPermissionsMiddleware.js";
-import { IEditor, IEditorBase } from "../editor/editorModel.js";
 import EditorRepository from "../editor/editorRepository.js";
+import { EditorBase, EditorDocument } from "../editor/editorModel.js";
 
 class EditorsManageService {
    constructor(private editorRepository: EditorRepository) { }
 
    // Editor creation
 
-   async createEditorAndGetLoginCode(editor: IEditorBase): Promise<string> {
+   async createEditorAndGetLoginCode(editor: EditorBase): Promise<string> {
       try {
          let code: string;
 
@@ -42,7 +42,7 @@ class EditorsManageService {
       }
    }
 
-   async getAllEditors(): Promise<IEditor[]> {
+   async getAllEditors(): Promise<EditorDocument[]> {
       try {
          return this.editorRepository.showAllEditorsDetails();
       } catch (error) {

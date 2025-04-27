@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import EditorsManageService from "./editorsManageService.js";
 import EmailService, { RegistrationData } from "../../../shared/services/emailService.js";
 import { AuthenticationError, NoUserDataError, UserNotFoundInDatabaseError } from "../../common/errors/userErrors.js";
-import { IEditor, IEditorBase } from "../editor/editorModel.js";
+import { EditorBase, EditorDocument } from "../editor/editorModel.js";
 
 class EditorsManageController {
    constructor(private editorsManageService: EditorsManageService, private emailService: EmailService) { }
@@ -12,7 +12,7 @@ class EditorsManageController {
          if (!req.body.permission || !(Array.isArray(req.body.permission) && req.body.permission.every((item: string) => typeof item === 'string'))) throw new NoUserDataError();
 
          req.body.permission = await this.editorsManageService.adaptPermissions(req.body.permissions);
-         const editor: IEditorBase = req.body;
+         const editor: EditorBase = req.body;
          if (!editor) throw new NoUserDataError();
 
          const loginCode: string = await this.editorsManageService.createEditorAndGetLoginCode(editor);
@@ -20,7 +20,7 @@ class EditorsManageController {
          const emailData: RegistrationData = { emailTo: editor.email, code: loginCode };
          await this.emailService.sendRegistrationEmail(emailData);
 
-         res.status(201).json({ message: "Editor created" });
+         res.status(201).send("Editor created");
       } catch (error) {
          next(error);
       }
@@ -40,15 +40,15 @@ class EditorsManageController {
 
          this.emailService.sendRegistrationEmail(resendData);
 
-         res.status(200).json({ message: "E-mail sended" });
+         res.status(200).send("E-mail sended");
       } catch (error) {
          next(error);
       }
    }
 
-   async showAllUsernames(req: Request, res: Response, next: NextFunction): Promise<void> {
+   async showAllEditors(req: Request, res: Response, next: NextFunction): Promise<void> {
       try {
-         const editors: IEditor[] = await this.editorsManageService.getAllEditors();
+         const editors: EditorDocument[] = await this.editorsManageService.getAllEditors();
 
          res.status(200).json({ editors });
       } catch (error) {
@@ -73,7 +73,7 @@ class EditorsManageController {
          const newPermissions: number = await this.editorsManageService.adaptPermissions(permissions);
          await this.editorsManageService.changePermissions(id, newPermissions);
 
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next(error);
       }
@@ -84,7 +84,7 @@ class EditorsManageController {
       try {
          if (!id || !username) throw new NoUserDataError();
          await this.editorsManageService.changeUsername(id, username);
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next(error);
       }

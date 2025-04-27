@@ -6,7 +6,7 @@ import { LoginCredentialsIncorrectError } from "./common/errors/userErrors.js";
 import { HashingTokenError } from "./common/errors/jwtCustomErrors.js";
 import { ILimitedUserDetails, ILoginCredentials, ILoginTokens } from "./common/types/userTypes.js";
 import { StoredRefreshToken, StoredRefreshTokenBase } from "./common/interfaces/storedRefreshTokenInterface.js";
-import { generateToken, IJwtPayload, TokenType, verifyToken } from "../shared/utils/jwtUtils.js";
+import { generateToken, IJwtPayload, TokenType, verifyToken } from "./common/utils/jwtUtils.js";
 
 /**
  * Abstract service handling login operations.
@@ -23,12 +23,13 @@ export abstract class AbstractUserService {
          const isPasswordValid: boolean = await this.#comparePasswords(credentials.password!, userCredentials.password!);
          delete credentials.password;
          delete userCredentials.password;
+         const tokenPayload: IJwtPayload = { id: String(userCredentials.id), username: userCredentials.username, permissions: userCredentials.permissions };
 
          if (isPasswordValid) {
-            const tokens: ILoginTokens = await this.generateTokens(userCredentials);
+            const tokens: ILoginTokens = await this.generateTokens(tokenPayload);
 
             const hashedToken: string = await this.hashToken(tokens.refreshToken);
-            const refreshToken: StoredRefreshTokenBase = { hashedToken, userId: userCredentials.id }
+            const refreshToken: StoredRefreshTokenBase = { hashedToken, userId: tokenPayload.id }
             await this.saveRefreshTokenInDB(refreshToken);
 
             response = tokens;

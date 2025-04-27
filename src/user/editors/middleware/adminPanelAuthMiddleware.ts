@@ -1,6 +1,5 @@
 import { Response, NextFunction } from "express";
 import { JwtNoTokenError } from "../../common/errors/jwtCustomErrors.js";
-import { IJwtPayload, verifyToken } from "../../../shared/utils/jwtUtils.js";
 import { ILoginTokens } from "../../common/types/userTypes.js";
 import EditorRepository from "../editor/editorRepository.js";
 import EditorRefreshTokenRepository from "../refresh-tokens/editorRefreshTokenRepository.js";
@@ -9,6 +8,7 @@ import { AuthenticatedRequest } from "../../common/interfaces/middlewareInterfac
 import { AuthenticationError } from "../../common/errors/userErrors.js";
 import { CustomError, NonCriticalError } from "../../../shared/error/indexErrors.js";
 import jwt from "jsonwebtoken";
+import { IJwtPayload, verifyToken } from "../../common/utils/jwtUtils.js";
 
 const adminPanelAuthMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
    const editorRepository: EditorRepository = new EditorRepository();

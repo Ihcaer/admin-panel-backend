@@ -1,13 +1,13 @@
 import { Document, model, Schema } from "mongoose";
 
-export interface IEditorBase {
+export interface EditorBase {
    username: string;
    email: string;
    permissions: number;
    loginCode?: string;
 }
 
-export interface IEditor extends IEditorBase, Document {
+export interface EditorDocument extends EditorBase, Document {
    password?: string;
    passwordResetCode?: string;
    createdAt?: Date;
@@ -23,6 +23,6 @@ const editorSchema: Schema = new Schema({
    createdAt: { type: Date, required: true, default: Date.now }
 });
 
-const Editor = model<IEditor>("Editor", editorSchema);
+const Editor = model<EditorDocument>("Editor", editorSchema);
 
 export default Editor;

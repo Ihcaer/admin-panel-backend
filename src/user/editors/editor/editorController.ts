@@ -34,7 +34,7 @@ class EditorController implements IUserController {
          loginCode = await this.editorService.handleNewLoginCode(email);
          await this.emailService.sendPasswordResetEmail(email, loginCode);
 
-         res.status(200).json({ message: "E-mail with password reset link sent" });
+         res.status(200).send("E-mail with password reset link sent");
       } catch (error) {
          next(error);
       }
@@ -46,7 +46,7 @@ class EditorController implements IUserController {
          if (!passwordResetCode || !password) throw new AuthenticationError();
          await this.editorService.setPassword(passwordResetCode, password, "reset");
 
-         res.status(200).json({ message: "Password changed" });
+         res.status(200).send("Password changed");
       } catch (error) {
          next(error);
       }
@@ -57,7 +57,7 @@ class EditorController implements IUserController {
       try {
          if (!loginCode || !password) throw new AuthenticationError();
          await this.editorService.setPassword(loginCode, password, "registration");
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next(error);
       }
@@ -69,7 +69,7 @@ class EditorController implements IUserController {
          if (!newPassword) throw new NoUserDataError();
 
          await this.editorService.setPassword(id, newPassword, "change");
-         res.status(200).json({ message: "Password changed" });
+         res.status(200).send("Password changed");
       } catch (error) {
          next(error);
       }

@@ -8,7 +8,7 @@ class SuperAdminController {
       const restApiTypes = req.body;
       try {
          this.superAdminService.disableRestApi(restApiTypes);
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next();
       }
@@ -17,7 +17,7 @@ class SuperAdminController {
    activateRestApi(req: Request, res: Response, next: NextFunction): void {
       try {
          this.superAdminService.activateRestApi();
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next();
       }

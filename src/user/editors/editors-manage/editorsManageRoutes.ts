@@ -16,7 +16,7 @@ const editorsManageController = new EditorsManageController(editorManageService,
 editorsManageRoutes.post('/create', restMiddleware, editorsManageController.createEditor.bind(editorsManageController));
 
 // Get
-editorsManageRoutes.get('/all', restMiddleware, editorsManageController.showAllUsernames.bind(editorsManageController));
+editorsManageRoutes.get('/all', restMiddleware, editorsManageController.showAllEditors.bind(editorsManageController));
 editorsManageRoutes.get('/get-all-permissions', restMiddleware, editorsManageController.sendAllPermissions.bind(editorsManageController));
 
 // Put

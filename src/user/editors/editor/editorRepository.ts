@@ -1,9 +1,9 @@
 import { EditorUsernameAndPermits, ILimitedUserDetails } from "../../common/types/userTypes.js";
-import Editor, { IEditor, IEditorBase } from "./editorModel.js";
+import Editor, { EditorBase, EditorDocument } from "./editorModel.js";
 
 
 class EditorRepository {
-   async createEditor(editor: IEditorBase): Promise<void> {
+   async createEditor(editor: EditorBase): Promise<void> {
       await Editor.create(editor);
    }
 
@@ -13,8 +13,8 @@ class EditorRepository {
       return Editor.findById(id, 'email -_id');
    }
 
-   async showAllEditorsDetails(): Promise<IEditor[]> {
-      return Editor.find({}, 'username email permits');
+   async showAllEditorsDetails(): Promise<EditorDocument[]> {
+      return Editor.find({}, 'username email permits createdAt');
    }
 
    async findEditorCredentialsByEmail(email: string): Promise<ILimitedUserDetails | null> {

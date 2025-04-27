@@ -14,7 +14,7 @@ export type ILoginCredentials = {
 export type ILimitedUserDetails = {
    id: Types.ObjectId | string;
    username: string;
-   permissions?: number
+   permissions: number
    password?: string;
 }
 

@@ -9,13 +9,13 @@ class ContactFormController {
          const contactData: ContactData = req.body;
 
          if (!contactData.name || !contactData.email || !contactData.message) {
-            res.status(400).json({ status: "error", message: "Proszę wypełnić wszystkie pola formularza." });
+            res.status(400).send("Missing fields");
             return;
          }
 
          await this.emailService.sendContactFormEmail(contactData);
 
-         res.status(200);
+         res.sendStatus(200);
       } catch (error) {
          next(error);
       }
